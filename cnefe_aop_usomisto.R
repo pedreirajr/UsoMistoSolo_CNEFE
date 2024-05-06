@@ -1,5 +1,3 @@
-# Ajustes iniciais
-
 ## Chamada das bibliotecas
 library(geobr); library(tidyverse); library(sf); library(arrow);
 library(tictoc); library(aopdata); library(RColorBrewer); 
