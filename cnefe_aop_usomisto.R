@@ -1,9 +1,9 @@
 # Ajustes iniciais
 
 ## Chamada das bibliotecas
-library(geobr); library(tidyverse); library(sf); library(arrow); library(duckdb);
-library(tictoc); library(aopdata); library(tidyr); library(parallel); library(patchwork)
-library(RColorBrewer); library(plotly)
+library(geobr); library(tidyverse); library(sf); library(arrow);
+library(tictoc); library(aopdata); library(RColorBrewer); 
+
 
 #(0) Lendo os endereços de Salvador ####
 ## Site do IBGE para baixar os dados por município:
