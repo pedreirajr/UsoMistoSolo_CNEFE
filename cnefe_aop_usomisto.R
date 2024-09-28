@@ -1,6 +1,7 @@
 ## Chamada das bibliotecas
 library(geobr); library(tidyverse); library(sf); library(arrow);
 library(tictoc); library(aopdata); library(RColorBrewer); 
+library(spdep); library(spatialreg)
 
 
 #(0) Lendo os endereços de Salvador ####
@@ -46,7 +47,7 @@ wide_counts <- counts %>%
 ssa_final <- ssa %>%
   left_join(wide_counts, by = "id_hex")  
 
-#(2) Cálculo do indicador de Entropia para verificar uso misto do solo ####
+# (2) Cálculo do indicador de Entropia para verificar uso misto do solo ####
 ssa_final <- ssa_final %>% 
   rowwise() %>% 
   mutate(
@@ -89,5 +90,29 @@ ssa_final %>%
     plot.title = element_text(hjust = 0.5))
 ggsave('resid_perc.jpg', dpi = 500)
 
+# (3) Produzindo LISA ####
+## Cria a matriz de vizinhança baseada na geometria hexagonal
+mat_viz <- poly2nb(ssa_final, queen = FALSE, snap = 1e-5) # 'queen=FALSE' respeita a forma hexagonal
 
+# Cria a lista de pesos espaciais
+pesos_esp <- nb2listw(mat_viz, style = "W", zero.policy = TRUE)
 
+# Calculeao índice LISA
+lisa <- localmoran(ssa_final$entropy, pesos_esp)
+
+# AdicionA os resultados do LISA ao seu data frame espacial
+ssa_final$lisa <- lisa[,1]
+ssa_final$lisa_cat <- attr(lisa, 'quadr')$pysal
+
+# Visualize o mapa do LISA
+ssa_final %>% 
+  ggplot() + 
+  geom_sf(aes(fill = lisa_cat)) + 
+  scale_fill_manual(values = c("High-High" = "#DC3323", 
+                               "High-Low" = "#E89E9B", 
+                               "Low-Low" = "#341DF4", 
+                               "Low-High" = "#9E9BF8", 
+                               "Not Significant" = "white")) +
+  theme_void() +
+  labs(fill = "LISA Cluster")
+ggsave('lisa_entropia.jpg', dpi = 500)
