@@ -77,7 +77,7 @@ ssa_final %>%
   theme(
     plot.title = element_text(hjust = 0.5),
     plot.subtitle = element_text(hjust = 0.5, size = 10))
-ggsave('entropia.jpg', dpi = 500)
+ggsave('entropia.jpg', dpi = 500, height = 6, width = 8)
 
 ## (3b) Mapa de Uso Residencial
 ssa_final %>% 
