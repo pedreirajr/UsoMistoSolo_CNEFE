@@ -115,4 +115,4 @@ ssa_final %>%
                                "Not Significant" = "white")) +
   theme_void() +
   labs(fill = "LISA Cluster")
-ggsave('lisa_entropia.jpg', dpi = 500)
+ggsave('lisa_entropia.jpg', dpi = 500, height = 6, width = 8)
