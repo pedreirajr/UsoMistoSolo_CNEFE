@@ -21,11 +21,11 @@ ssa <- ssa %>%
 
 
 #(1) Geoprocessamento ####
-##(1a) Transformando em tibble e depois sf para as operações de join:
+## (1a) Transformando em tibble e depois sf para as operações de join:
 end_tb <- as_tibble(end)
 end_sf <- st_as_sf(end_tb, coords = c("LONGITUDE", "LATITUDE"), crs = 4326)
 
-##(1b) Fazendo o join especial dos pontos do CNEFE com os hexágonos do AOP
+## (1b) Fazendo o join especial dos pontos do CNEFE com os hexágonos do AOP
 tic()
 points_in_hex <- end_sf %>% st_join(ssa) 
 toc() # ~37 segundos (depende da máquina)
@@ -59,11 +59,10 @@ ssa_final <- ssa_final %>%
     prop_n_res = (tot - COD_ESPECIE1)/tot,
     entropy = {
       entropy <- -sum(c_across(starts_with('prop')) * 
-                        log(c_across(starts_with('prop'))), na.rm = TRUE)
+                        log(c_across(starts_with('prop'))), na.rm = TRUE)/log(2)
       if (is.nan(entropy) | is.infinite(entropy)) 0 else entropy
     }
   ) %>% ungroup()
-
 
 # (3) Produção dos mapas ####
 ## (3a) Mapa de Entropia
@@ -88,7 +87,7 @@ ssa_final %>%
   theme_void() +
   theme(
     plot.title = element_text(hjust = 0.5))
-ggsave('resid_perc.jpg', dpi = 500)
+ggsave('resid_perc.jpg', dpi = 500, height = 6, width = 8)
 
 # (3) Produzindo LISA ####
 ## Cria a matriz de vizinhança baseada na geometria hexagonal
