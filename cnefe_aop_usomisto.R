@@ -115,3 +115,6 @@ ssa_final %>%
   theme_void() +
   labs(fill = "LISA Cluster")
 ggsave('lisa_entropia.jpg', dpi = 500, height = 6, width = 8)
+
+# (4) Salva o arquivo final em formato .gpkg ####
+st_write(ssa_final, 'ssa_uso_solo.gpkg')
